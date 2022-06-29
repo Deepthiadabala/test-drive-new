@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.stg.model.ResponseSuccess;
 import com.stg.model.User;
 import com.stg.service.UserService;
 
@@ -45,4 +47,8 @@ public class UserController {
 		return new ResponseEntity<User>(user2, HttpStatus.OK);
 	}
 
+	@PutMapping(value = "book-bike/{userId}/{modelNo}")
+	public ResponseEntity<ResponseSuccess> bookBike(@PathVariable int userId, @PathVariable int modelNo ){
+		return userService.bookBike(userId, modelNo);
+	}
 }

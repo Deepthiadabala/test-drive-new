@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -70,12 +71,9 @@ public class BikeModel {
 	@JsonBackReference(value = "admin_bike")
 	private Admin admin;
 
-	@JsonManagedReference(value = "bikeModel")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE } , mappedBy = "bikeModels")
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bikeModel")
 	private List<User> users;
 
-	@OneToOne(mappedBy = "bikeModel")
-	private Booking booking;
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.stg.exception.ResourceNotFoundException;
 import com.stg.model.BikeModel;
+import com.stg.model.User;
 import com.stg.repository.BikeModelRepository;
 
 @Service
@@ -54,14 +55,29 @@ public class BikeServiceImpl implements BikeService {
 	}
 
 	@Override
-	public String deleteByBikeId(int bikeId,BikeModel bikeModel) {
-		if(bikeModel.getModelNo() == bikeId) {
+	public String deleteByBikeId(int bikeId, BikeModel bikeModel) {
+		if (bikeModel.getModelNo() == bikeId) {
 			bikeModelRepository.deleteById(bikeId);
 			return "deleted";
-		}
-		else {
+		} else {
 			throw new ResourceNotFoundException("Id is not found");
 		}
+	}
+
+	@Override
+	public BikeModel getBikeByModelNo(int modelNo) {
+
+		return bikeModelRepository.findById(modelNo).get();
+	}
+
+	@Override
+	public List<User> getUsersByModelNo(int modelNo) {
+
+		BikeModel bikeModel = bikeModelRepository.findById(modelNo).get();
+		if (bikeModel == null) {
+			throw new ResourceNotFoundException("Bike model not available.");
+		}
+		return bikeModel.getUsers();
 	}
 
 }

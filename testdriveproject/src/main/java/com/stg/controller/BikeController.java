@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stg.model.BikeModel;
-
+import com.stg.model.User;
 import com.stg.service.BikeService;
 
 @RestController
@@ -53,11 +53,17 @@ public class BikeController {
 		String message = bikeService.deleteBikeByName(name);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
-	// deleting delete mapping that delete the bike model in the database by Id
-		@DeleteMapping("/deleteBikeById/{id}")
-		public ResponseEntity<String> deleteBikeById(@PathVariable int id,BikeModel bikeModel) {
-			String message = bikeService.deleteByBikeId(id, bikeModel);
-			return new ResponseEntity<String>(message, HttpStatus.OK);
-		}
 
+	// deleting delete mapping that delete the bike model in the database by Id
+	@DeleteMapping("/deleteBikeById/{id}")
+	public ResponseEntity<String> deleteBikeById(@PathVariable int id, BikeModel bikeModel) {
+		String message = bikeService.deleteByBikeId(id, bikeModel);
+		return new ResponseEntity<String>(message, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "get-users/{modelNo}")
+	public List<User> getUsersByModelNo(@PathVariable int modelNo){
+		return bikeService.getUsersByModelNo(modelNo);
+	}
+	
 }

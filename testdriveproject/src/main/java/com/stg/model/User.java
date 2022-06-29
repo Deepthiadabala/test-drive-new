@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -46,11 +48,9 @@ public class User {
 	@Column(name = "MailId", length = 30)
 	private String mailId;
 
-	@JsonBackReference(value = "bikeModel")
-
-	@ManyToOne(cascade = CascadeType.ALL)
-
-	@JoinColumn(name = "modelNo", nullable = false)
-	private BikeModel bikeModel;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "users_bikes", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
+			@JoinColumn(name = "modelNo") })
+	private List<BikeModel> bikeModels;
 
 }

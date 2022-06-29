@@ -2,6 +2,9 @@ package com.stg.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
+import com.stg.model.ResponseSuccess;
 import com.stg.model.User;
 
 public interface UserService {
@@ -14,5 +17,7 @@ public interface UserService {
 	public abstract List<User> getAllUser();
 
 	public abstract List<User> getUserByName(String userName);
+	
+	public abstract ResponseEntity<ResponseSuccess> bookBike(int userId, int modelNo);
 
 }

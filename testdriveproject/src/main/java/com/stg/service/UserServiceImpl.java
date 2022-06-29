@@ -3,9 +3,13 @@ package com.stg.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.stg.exception.ResourceNotFoundException;
+import com.stg.model.BikeModel;
+import com.stg.model.ResponseSuccess;
 import com.stg.model.User;
 import com.stg.repository.UserRepository;
 
@@ -13,6 +17,9 @@ import com.stg.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BikeService bikeService;
 
 	@Override
 	public User createUser(User user) {
@@ -42,6 +49,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getUserByName(String userName) {
 		return userRepository.findByUserName(userName);
+	}
+
+	@Override
+	public ResponseEntity<ResponseSuccess> bookBike(int userId, int modelNo) {
+		try {
+			User user = userRepository.findByUserId(userId);
+			BikeModel bikeModel = bikeService.getBikeByModelNo(modelNo);
+			if( bikeModel == null) {
+				throw new ResourceNotFoundException("Bike model not available.");
+			}
+			user.getBikeModels().add(bikeModel);
+			userRepository.save(user);
+			ResponseSuccess responseSuccess = new ResponseSuccess("Bike boooked successfully.");
+			return new ResponseEntity<ResponseSuccess>(responseSuccess, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			throw new ResourceNotFoundException(e.getMessage());
+		}
+		
 	}
 
 }
